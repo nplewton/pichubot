@@ -3,6 +3,7 @@ import melee
 import argparse
 import signal
 import sys
+from strategy import Strategy
 
 import globals
 #This example program demonstrates how to use the Melee API to run dolphin programatically,
@@ -80,17 +81,24 @@ signal.signal(signal.SIGINT, signal_handler)
 #   dolphin will hang waiting for input and never receive it
 controller.connect()
 
+strategy = Strategy()
+
 #Main loop
 while True:
     #"step" to the next frame
     gamestate.step()
-    if(gamestate.processingtime * 1000 > 12):
-        print("WARNING: Last frame took " + str(gamestate.processingtime*1000) + "ms to process.")
 
     #What menu are we in?
     if gamestate.menu_state == melee.enums.Menu.IN_GAME:
-        pass
-        # insert our code here
+        try:
+            strategy.step()
+        except Exception as error:
+            # Do nothing in case of error thrown!
+            controller.empty_input()
+            if log:
+                log.log("Notes", "Exception thrown: " + repr(error) + " ", concat=True)
+            strategy = Strategy()
+         
     #If we're at the character select screen, choose our character
     elif gamestate.menu_state == melee.enums.Menu.CHARACTER_SELECT:
         melee.menuhelper.choosecharacter(character=melee.enums.Character.PICHU,
