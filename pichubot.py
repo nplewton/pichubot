@@ -4,6 +4,7 @@ import argparse
 import signal
 import sys
 
+import globals
 #This example program demonstrates how to use the Melee API to run dolphin programatically,
 #   setup controllers, and send button presses over to dolphin
 
@@ -51,10 +52,11 @@ if args.live:
 #Create our Dolphin object. This will be the primary object that we will interface with
 dolphin = melee.dolphin.Dolphin(ai_port=args.port, opponent_port=args.opponent,
     opponent_type=opponent_type, logger=log)
-#Create our GameState object for the dolphin instance
-gamestate = melee.gamestate.GameState(dolphin)
-#Create our Controller object that we can press buttons on
-controller = melee.controller.Controller(port=args.port, dolphin=dolphin)
+#initialize our global objects
+globals.init(dolphin, args.port, args.opponent)
+
+gamestate = globals.gamestate
+controller = globals.controller
 
 def signal_handler(signal, frame):
     dolphin.terminate()
@@ -87,6 +89,7 @@ while True:
 
     #What menu are we in?
     if gamestate.menu_state == melee.enums.Menu.IN_GAME:
+        pass
         # insert our code here
     #If we're at the character select screen, choose our character
     elif gamestate.menu_state == melee.enums.Menu.CHARACTER_SELECT:
