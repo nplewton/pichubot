@@ -98,14 +98,14 @@ while True:
             melee.techskill.multishine(ai_state=gamestate.ai_state, controller=controller)
     #If we're at the character select screen, choose our character
     elif gamestate.menu_state == melee.enums.Menu.CHARACTER_SELECT:
-        melee.menuhelper.choosecharacter(character=melee.enums.Character.FOX,
-            gamestate=gamestate, controller=controller, swag=True, start=True)
+        melee.menuhelper.choosecharacter(character=melee.enums.Character.PICHU,
+            gamestate=gamestate, controller=controller, swag=False, start=True)
     #If we're at the postgame scores screen, spam START
     elif gamestate.menu_state == melee.enums.Menu.POSTGAME_SCORES:
         melee.menuhelper.skippostgame(controller=controller)
     #If we're at the stage select screen, choose a stage
     elif gamestate.menu_state == melee.enums.Menu.STAGE_SELECT:
-        melee.menuhelper.choosestage(stage=melee.enums.Stage.POKEMON_STADIUM,
+        melee.menuhelper.choosestage(stage=melee.enums.Stage.FINAL_DESTINATION,
             gamestate=gamestate, controller=controller)
     #Flush any button presses queued up
     controller.flush()
