@@ -1,10 +1,9 @@
 import melee
 import globals
 import random
-from Chains.chain import Chain
 from melee.enums import Action, Button
 
-class DashDance(Chain):
+class DashDance():
     def __init__(self, pivot, radius=0):
         self.pivotpoint = pivot
         self.radius = radius

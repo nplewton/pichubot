@@ -1,6 +1,7 @@
 import melee
 import globals
 import Tactics
+from Tactics.keepdistance import KeepDistance
 from melee.enums import Action, Button
 
 class Strategy:
@@ -10,12 +11,9 @@ class Strategy:
         self.approach = False
 
     def picktactic(self, tactic, args=[]):
-        print("This stupid function got called")
         if type(self.tactic) != tactic:
-            self.tactic = tactic(*args)
-        print("About to call the step")
+            self.tactic = tactic()
         self.tactic.step()
-        print("Called it in theory")
 
     def __str__(self):
         string = "Strategy"
@@ -35,4 +33,4 @@ class Strategy:
 
         # This is where we will put all of the if statements to pick tactics
 
-        self.picktactic(Tactics.KeepDistance)
+        self.picktactic(KeepDistance)

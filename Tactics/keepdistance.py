@@ -1,11 +1,18 @@
 import melee
 import globals
 import Chains
-from Tactics.tactic import Tactic
+from Chains.dashdance import DashDance
 from melee.enums import Character, Action
 
 # Dash dance a just a little outside our opponont's range
-class KeepDistance(Tactic):
+class KeepDistance():
+    chain = None
+
+    def pickchain(self, chain, args=[]):
+        if type(self.chain) != chain:
+            self.chain = chain(*args)
+        self.chain.step()
+
     def getbufferzone(self):
         character = globals.opponent_state.character
         bufferzone = 30
@@ -31,8 +38,8 @@ class KeepDistance(Tactic):
             bufferzone = 15
 
         # If we're in the first two difficulty levels, just get in there
-        if globals.difficulty > 2:
-            bufferzone = 0
+        #if globals.difficulty > 2:
+        #    bufferzone = 0
         # Stay a little further out if they're invulnerable
         if globals.opponent_state.invulnerability_left > 0:
             bufferzone += 20
@@ -44,7 +51,6 @@ class KeepDistance(Tactic):
         return bufferzone
 
     def step(self):
-        print("Here")
         opponent_state = globals.opponent_state
         smashbot_state = globals.smashbot_state
 
@@ -77,4 +83,4 @@ class KeepDistance(Tactic):
         pivotpoint = max(pivotpoint, (-edge) + edgebuffer)
 
         self.chain = None
-        self.pickchain(Chains.DashDance, [pivotpoint])
+        self.pickchain(DashDance, [pivotpoint])
