@@ -2,6 +2,7 @@ import melee
 import globals
 import Tactics
 from Tactics.keepdistance import KeepDistance
+from Tactics.retreat import Retreat
 from melee.enums import Action, Button
 
 class Strategy:
@@ -33,4 +34,8 @@ class Strategy:
 
         # This is where we will put all of the if statements to pick tactics
 
+        if Retreat.shouldretreat():
+            self.picktactic(Retreat)
+            return
+        
         self.picktactic(KeepDistance)
