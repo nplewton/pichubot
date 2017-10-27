@@ -35,6 +35,9 @@ class Strategy:
         smashbot_state = globals.smashbot_state
 
         # This is where we will put all of the if statements to pick tactics
+        
+        #if Defend.needsdefense():
+        #self.picktactic(Defend)
 
         # If we can punish our opponent for a laggy move, let's do that
         if Punish.canpunish():
@@ -44,8 +47,5 @@ class Strategy:
         if Retreat.shouldretreat():
             self.picktactic(Retreat)
             return
-
-        #if Defend.needsdefense():
-        #self.picktactic(Defend)
 
         self.picktactic(KeepDistance)
