@@ -2,6 +2,8 @@ import melee
 import globals
 import Tactics
 from Tactics.keepdistance import KeepDistance
+from Tactics.defend import Defend
+from Tactics.retreat import Retreat
 from melee.enums import Action, Button
 
 class Strategy:
@@ -32,5 +34,12 @@ class Strategy:
         smashbot_state = globals.smashbot_state
 
         # This is where we will put all of the if statements to pick tactics
+
+        if Retreat.shouldretreat():
+            self.picktactic(Retreat)
+            return
+
+        #if Defend.needsdefense():
+        #self.picktactic(Defend)
 
         self.picktactic(KeepDistance)
