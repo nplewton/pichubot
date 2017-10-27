@@ -34,12 +34,12 @@ class Strategy:
         smashbot_state = globals.smashbot_state
 
         # This is where we will put all of the if statements to pick tactics
+        
+        #if Defend.needsdefense():
+        #self.picktactic(Defend)
 
         if Retreat.shouldretreat():
             self.picktactic(Retreat)
             return
-
-        #if Defend.needsdefense():
-        #self.picktactic(Defend)
 
         self.picktactic(KeepDistance)
