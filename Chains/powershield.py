@@ -7,6 +7,7 @@ class Powershield():
         self.hold = hold
 
     def step(self):
+        print ("hello:")
         controller = globals.controller
         smashbot_state = globals.smashbot_state
 

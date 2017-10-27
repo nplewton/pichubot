@@ -32,15 +32,6 @@ class Wavedash():
         jumping = [Action.JUMPING_ARIAL_FORWARD, Action.JUMPING_ARIAL_BACKWARD]
         jumpcancel = (smashbot_state.action == Action.KNEE_BEND) and (smashbot_state.action_frame == 3)
 
-        isInShineStart = smashbot_state.action in [Action.DOWN_B_STUN, Action.DOWN_B_GROUND_START, \
-            Action.DOWN_B_GROUND]
-
-        # Jump out of shine
-        if isInShineStart and smashbot_state.action_frame >= 3 and smashbot_state.on_ground:
-            self.interruptible = False
-            controller.press_button(Button.BUTTON_Y)
-            return
-
         shielding = smashbot_state.action in [Action.SHIELD_START, Action.SHIELD, \
             Action.SHIELD_RELEASE, Action.SHIELD_STUN, Action.SHIELD_REFLECT]
         neutral = smashbot_state.action in [Action.STANDING, Action.DASHING, Action.TURNING, \
@@ -67,12 +58,6 @@ class Wavedash():
             if onleft != self.towards:
                 x = -x
             controller.tilt_analog(Button.BUTTON_MAIN, x, .2);
-            return
-
-        # If we're sliding and have shined, then we're all done here
-        if smashbot_state.action == Action.LANDING_SPECIAL:
-            self.interruptible = True
-            controller.empty_input()
             return
 
         if smashbot_state.action == Action.STANDING:
