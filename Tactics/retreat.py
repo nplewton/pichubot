@@ -58,8 +58,6 @@ class Retreat():
             return
 
         bufferzone = 30
-        if globals.opponent_state.character == Character.SHEIK and globals.opponent_state.action == Action.SWORD_DANCE_2_HIGH:
-            bufferzone = 55
         onright = globals.opponent_state.x < globals.smashbot_state.x
         if not onright:
             bufferzone *= -1
