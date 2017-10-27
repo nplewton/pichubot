@@ -2,6 +2,7 @@ import melee
 import globals
 import Tactics
 from Tactics.keepdistance import KeepDistance
+from Tactics.defend import Defend
 from Tactics.retreat import Retreat
 from melee.enums import Action, Button
 
@@ -37,5 +38,8 @@ class Strategy:
         if Retreat.shouldretreat():
             self.picktactic(Retreat)
             return
-        
+
+        #if Defend.needsdefense():
+        #self.picktactic(Defend)
+
         self.picktactic(KeepDistance)
