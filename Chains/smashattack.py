@@ -30,15 +30,6 @@ class SmashAttack():
             controller.press_button(Button.BUTTON_Y);
             return
 
-        # Jump out of shine
-        isInShineStart = (smashbot_state.action == Action.DOWN_B_STUN or \
-            smashbot_state.action == Action.DOWN_B_GROUND_START or \
-            smashbot_state.action == Action.DOWN_B_GROUND)
-        if isInShineStart and smashbot_state.action_frame >= 3 and smashbot_state.on_ground:
-            self.interruptible = False
-            controller.press_button(Button.BUTTON_Y)
-            return
-
         if smashbot_state.action in [Action.FSMASH_MID, Action.UPSMASH, Action.DOWNSMASH]:
             # Are we in the early stages of the smash and need to charge?
             if self.frames_charged < self.charge:

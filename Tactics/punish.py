@@ -129,25 +129,24 @@ class Punish():
             return True
 
         # Can we shine right now without any movement?
-        shineablestates = [Action.TURNING, Action.STANDING, Action.WALK_SLOW, Action.WALK_MIDDLE, \
-            Action.WALK_FAST, Action.EDGE_TEETERING_START, Action.EDGE_TEETERING, Action.CROUCHING, \
-            Action.RUNNING]
+        downsmashablestate = [Action.STANDING, Action.WALK_SLOW, Action.WALK_MIDDLE, \
+            Action.WALK_FAST, Action.EDGE_TEETERING_START, Action.EDGE_TEETERING, Action.CROUCHING]
 
         #TODO: Wrap the shine range into a helper
-        foxshinerange = 11.8
-        inshinerange = globals.gamestate.distance < foxshinerange
+        downsmashrange = 11.8
+        indownsmashrange = globals.gamestate.distance < downsmashrange
 
-        if inshinerange and globals.smashbot_state.action in shineablestates:
+        if indownsmashrange and globals.smashbot_state.action in downsmashablestate:
             return True
 
         #TODO: Wrap this up into a helper
-        foxrunspeed = 2.2
+        pikarunspeed = 1.8
         #TODO: Subtract from this time spent turning or transitioning
         # Assume that we can run at max speed toward our opponent
         # We can only run for framesleft-1 frames, since we have to spend at least one attacking
-        potentialrundistance = (left-1) * foxrunspeed
+        potentialrundistance = (left-1) * pikarunspeed
 
-        if globals.gamestate.distance - potentialrundistance < foxshinerange:
+        if globals.gamestate.distance - potentialrundistance < downsmashrange:
             return True
         return False
 
@@ -170,16 +169,13 @@ class Punish():
             globals.logger.log("Notes", "framesleft: " + str(framesleft) + " ", concat=True)
 
         # How many frames do we need for an upsmash?
-        # It's 7 frames normally, plus some transition frames
-        # 3 if in shield, shine, or dash/running
-        framesneeded = 7
+        # It's 8 frames normally, plus some transition frames
+        # 3 if in shield, or dash/running
+        framesneeded = 8
         shieldactions = [Action.SHIELD_START, Action.SHIELD, Action.SHIELD_RELEASE, \
             Action.SHIELD_STUN, Action.SHIELD_REFLECT]
-        shineactions = [Action.DOWN_B_STUN, Action.DOWN_B_GROUND_START, Action.DOWN_B_GROUND]
         runningactions = [Action.DASHING, Action.RUNNING]
         if smashbot_state.action in shieldactions:
-            framesneeded += 3
-        if smashbot_state.action in shineactions:
             framesneeded += 3
         if smashbot_state.action in runningactions:
             framesneeded += 3
@@ -262,7 +258,7 @@ class Punish():
                     height += speed
 
             distance = abs(endposition - smashbot_endposition)
-            if not slideoff and distance < 14.5 and -5 < height < 8:
+            if not slideoff and distance < 12.0 and -5 < height < 8:
                 if facing:
                     # Do the upsmash
                     # NOTE: If we get here, we want to delete the chain and start over
@@ -284,40 +280,6 @@ class Punish():
                 if smashbot_state.action in shieldactions or smashbot_state.action in shineactions:
                     self.pickchain(Wavedash)
                     return
-
-        # We can't smash our opponent, so let's just shine instead. Do we have time for that?
-        #TODO: Wrap the shine range into a helper
-        framesneeded = 1
-        if smashbot_state.action == Action.DASHING:
-            framesneeded = 2
-        if smashbot_state.action in [Action.SHIELD_RELEASE, Action.SHIELD]:
-            framesneeded = 4
-        if smashbot_state.action in [Action.DOWN_B_STUN, Action.DOWN_B_GROUND_START, Action.DOWN_B_GROUND]:
-            framesneeded = 4
-        foxshinerange = 11.8
-        if globals.gamestate.distance < foxshinerange:
-            if framesneeded <= framesleft:
-                if (not isroll) or (opponent_state.action_frame < 3):
-                    self.chain = None
-                    # If we are facing towards the edge, don't wavedash off of it
-                    #   Reduce the wavedash length
-                    x = 1
-                    # If we are really close to the edge, wavedash straight down
-                    if melee.stages.edgegroundposition(globals.gamestate.stage) - abs(smashbot_state.x) < 3:
-                        x = 0
-                    self.pickchain(Wavedash, [x])
-                    return
-            # We're in range, but don't have enough time. Let's try turning around to do a pivot.
-            else:
-                self.chain = None
-                # Pick a point right behind us
-                pivotpoint = smashbot_state.x
-                dashbuffer = 5
-                if smashbot_state.facing:
-                    dashbuffer = -dashbuffer
-                pivotpoint += dashbuffer
-                self.pickchain(DashDance, [pivotpoint])
-                return
 
         # Kill the existing chain and start a new one
         self.chain = None
