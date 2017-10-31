@@ -36,17 +36,20 @@ class Strategy:
 
         # This is where we will put all of the if statements to pick tactics
 
-        # If we can punish our opponent for a laggy move, let's do that
+
+
+        if Defend.needsdefense():
+            self.picktactic(Defend)
+            return
+
+
         if Punish.canpunish():
             self.picktactic(Punish)
             return
 
+
         if Retreat.shouldretreat():
             self.picktactic(Retreat)
             return
-
-        if Defend.needsdefense():
-           self.picktactic(Defend)
-           return
 
         self.picktactic(KeepDistance)
