@@ -5,6 +5,7 @@ from Tactics.keepdistance import KeepDistance
 from Tactics.punish import Punish
 from Tactics.defend import Defend
 from Tactics.retreat import Retreat
+from Tactics.recover import Recover
 from melee.enums import Action, Button
 
 class Strategy:
@@ -36,7 +37,9 @@ class Strategy:
 
         # This is where we will put all of the if statements to pick tactics
 
-
+        if Recover.needsrecovery():
+            self.picktactic(Recover)
+            return
 
         if Defend.needsdefense():
             self.picktactic(Defend)
