@@ -6,6 +6,7 @@ from Tactics.punish import Punish
 from Tactics.defend import Defend
 from Tactics.retreat import Retreat
 from Tactics.recover import Recover
+from Tactics.pressure import Pressure
 from melee.enums import Action, Button
 
 class Strategy:
@@ -49,7 +50,10 @@ class Strategy:
         if Punish.canpunish():
             self.picktactic(Punish)
             return
-
+        
+        if Pressure.canpressure():
+            self.picktactic(Pressure)
+            return
 
         if Retreat.shouldretreat():
             self.picktactic(Retreat)
